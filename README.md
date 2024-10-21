@@ -1,10 +1,10 @@
-# Práctica 3. Detección y reconocimiento de formas
+# Práctica 4. Reconocimiento de matrículas
 
-Este repositorio contiene la **Práctica 3** donde se utilizan técnicas de procesamiento de imágenes con **OpenCV** para la detección y caracterización geométrica de objetos. 
+Este repositorio contiene la **Práctica 4** donde se utilizan técnicas de procesamiento de video para la detección y seguimiento de vehículos y personas, aplicando reconocimiento de caracteres a las matrículas visibles. Para ello, hacemos uso de modelos YOLO para detectar objetos y OCRs para el reconocimiento de texto.
 
 # Índice
 
-- [Práctica 4. Reconocimiento de matrículas](#)
+- [Práctica 4. Reconocimiento de matrículas](#práctica-4-reconocimiento-de-matrículas)
 - [Índice](#índice)
   - [Librerías utilizadas](#librerías-utilizadas)
   - [Autores](#autores)
