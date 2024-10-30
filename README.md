@@ -34,26 +34,58 @@ Este proyecto fue desarrollado por:
 ### Tarea 1
 
 #### Instalar Real-ESRGAN
-Nos ponemos en la carpeta del proyecto:
 
--> conda install git
--> git clone https://github.com/xinntao/Real-ESRGAN
--> cd Real-ESRGAN
--> pip install basicsr
--> pip install facexlib
--> pip install gfpgan
--> pip install -r requirements.txt
--> python setup.py develop
+1. Primero, navega a la carpeta de tu proyecto y ejecuta los siguientes comandos:
 
-Descargamos: https://github.com/xinntao/Real-ESRGAN/releases/download/v0.1.0/RealESRGAN_x4plus.pth
-Y lo ponemos en la carpeta del proyecto.
+   ```bash
+   # Instalar Git (si no lo tienes ya instalado)
+   conda install git
 
-Luego tenemos que corregir un error, para ello vamos a: C:\Users\<aqui tu usuario>\anaconda3\envs\VC_P4\Lib\site-packages\basicsr\data\degradations.py
-cambia la línea:
+   # Clonar el repositorio de Real-ESRGAN
+   git clone https://github.com/xinntao/Real-ESRGAN
 
-from torchvision.transforms.functional_tensor import rgb_to_grayscale
-por:
-from torchvision.transforms.functional import rgb_to_grayscale
+   # Navegar dentro del directorio del proyecto
+   cd Real-ESRGAN
+
+   # Instalar dependencias
+   pip install basicsr
+   pip install facexlib
+   pip install gfpgan
+   pip install -r requirements.txt
+
+   # Configurar el entorno de desarrollo
+   python setup.py develop
+   ```
+
+2. Descargar el modelo preentrenado:
+   
+   Descarga el archivo del modelo desde el siguiente enlace y colócalo en la carpeta raíz del proyecto:  
+   [RealESRGAN_x4plus.pth](https://github.com/xinntao/Real-ESRGAN/releases/download/v0.1.0/RealESRGAN_x4plus.pth)
+
+##### Corrección de Error Conocido
+
+Para resolver un error que puede ocurrir, edita el archivo `degradations.py` en tu entorno.
+
+1. Localiza el archivo en:
+   ```plaintext
+   C:\Users\<tu_usuario>\anaconda3\envs\VC_P4\Lib\site-packages\basicsr\data\degradations.py
+   ```
+
+2. Busca la línea:
+
+   ```python
+   from torchvision.transforms.functional_tensor import rgb_to_grayscale
+   ```
+
+3. Reemplázala por:
+
+   ```python
+   from torchvision.transforms.functional import rgb_to_grayscale
+   ```
+
+Esto debería corregir el problema y completar el proceso de instalación.
+
+---
 
 ## Referencias y bibliografía
 
