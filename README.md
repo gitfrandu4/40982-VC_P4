@@ -33,6 +33,28 @@ Este proyecto fue desarrollado por:
 
 ### Tarea 1
 
+#### Instalar Real-ESRGAN
+Nos ponemos en la carpeta del proyecto:
+
+> conda install git
+>git clone https://github.com/xinntao/Real-ESRGAN
+>cd Real-ESRGAN
+>pip install basicsr
+>pip install facexlib
+>pip install gfpgan
+>pip install -r requirements.txt
+>python setup.py develop
+
+Descargamos: https://github.com/xinntao/Real-ESRGAN/releases/download/v0.1.0/RealESRGAN_x4plus.pth
+Y lo ponemos en la carpeta del proyecto.
+
+Luego tenemos que corregir un error, para ello vamos a: C:\Users\<aqui tu usuario>\anaconda3\envs\VC_P4\Lib\site-packages\basicsr\data\degradations.py
+cambia la línea:
+
+from torchvision.transforms.functional_tensor import rgb_to_grayscale
+por:
+from torchvision.transforms.functional import rgb_to_grayscale
+
 ## Referencias y bibliografía
 
 - YOLO Documentation: [ultralytics.com/yolo](https://docs.ultralytics.com/)
