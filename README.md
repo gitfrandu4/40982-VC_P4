@@ -73,54 +73,55 @@ if __name__ == "__main__":
 
 ### Graficas Del Reentreamiento
 
-<table>
+<table style="width: 100%; text-align: center;">
   <tr>
     <td style="text-align: center; padding-right: 20px;">
-      <img src="images/confusion_matrix.png" width="200" alt="Matriz de Confusión">
+      <img src="images/confusion_matrix.png" width="250" alt="Matriz de Confusión">
       <p>Esta es la matriz de confusión que muestra cómo el modelo predice cada clase. Aquí vemos que el modelo identificó correctamente 2088 casos de “License Plate” y solo confundió 91 con la clase “background”. Esto sugiere que el modelo tiene un buen desempeño en general, con pocos errores al identificar placas, aunque aún podría mejorar en la reducción de falsos positivos.</p>
     </td>
     <td style="text-align: center;">
-      <img src="/mnt/data/confusion_matrix_normalized.png" width="200" alt="Matriz de Confusión Normalizada">
+      <img src="images/confusion_matrix_normalized.png" width="250" alt="Matriz de Confusión Normalizada">
       <p>En esta matriz de confusión normalizada, se representa la precisión relativa para cada clase, o sea, se normalizan los valores para ver la proporción de aciertos en lugar de los números absolutos. Notamos que el modelo tiene un 98% de precisión para detectar “License Plate” y un 100% para el “background”. Esto indica que, aunque el modelo es muy preciso en general, aún confunde algunos casos.</p>
     </td>
   </tr>
   <tr>
     <td style="text-align: center; padding-right: 20px;">
-      <img src="images/F1_curve.png" width="200" alt="Curva de F1">
+      <img src="images/F1_curve.png" width="250" alt="Curva de F1">
       <p>La curva de F1 en función de la confianza muestra cómo varía la F1 (una métrica que combina precisión y recall) dependiendo del umbral de confianza. Podemos ver que el modelo alcanza su mejor valor de F1 (cerca de 0.97) para niveles de confianza alrededor de 0.5. Esto significa que a ese nivel de confianza, el modelo logra un buen balance entre la precisión y el recall.</p>
     </td>
     <td style="text-align: center;">
-      <img src="images/labels.jpg" width="200" alt="Distribución de Etiquetas">
+      <img src="images/labels.jpg" width="250" alt="Distribución de Etiquetas">
       <p>Esta gráfica muestra la distribución de etiquetas. Vemos que la mayoría de los datos pertenecen a la clase “License Plate”. Esto puede ser útil para entender el sesgo en el dataset y también nos ayuda a identificar si el modelo podría tener más dificultad en detectar “background” debido a la menor cantidad de ejemplos de esa clase.</p>
     </td>
   </tr>
   <tr>
     <td style="text-align: center; padding-right: 20px;">
-      <img src="images/labels_correlogram.jpg" width="200" alt="Correlograma de Etiquetas">
+      <img src="images/labels_correlogram.jpg" width="250" alt="Correlograma de Etiquetas">
       <p>El correlograma de etiquetas muestra cómo se relacionan entre sí algunas propiedades de las etiquetas, como “x”, “y”, “width” y “height”. Notamos que hay una correlación entre “width” y “height”, lo que sugiere que las placas de matrícula tienden a tener proporciones similares. Esto puede ser útil para el modelo en la detección de patrones consistentes en las dimensiones de las placas.</p>
     </td>
     <td style="text-align: center;">
-      <img src="images/P_curve.png" width="200" alt="Curva de Precisión">
+      <img src="images/P_curve.png" width="250" alt="Curva de Precisión">
       <p>Esta es la curva de precisión en función de la confianza, que muestra qué tan seguro está el modelo de sus predicciones. Aquí se observa que cuando el nivel de confianza es alto (por encima de 0.8), la precisión es casi perfecta (cercana al 100%). Esto significa que el modelo es muy preciso en sus predicciones cuando está bastante seguro, lo cual es un buen indicador de rendimiento.</p>
     </td>
   </tr>
   <tr>
     <td style="text-align: center; padding-right: 20px;">
-      <img src="images/PR_curve.png" width="200" alt="Curva Precisión-Recall">
+      <img src="images/PR_curve.png" width="250" alt="Curva Precisión-Recall">
       <p>La curva de precisión-recall es útil para ver cómo el modelo maneja el balance entre estos dos aspectos. Aquí se muestra que el modelo mantiene altos valores tanto de precisión como de recall en la mayoría de los puntos. Esto significa que el modelo no solo es bueno para hacer predicciones correctas, sino también para captar la mayoría de los ejemplos de interés.</p>
     </td>
     <td style="text-align: center;">
-      <img src="images/R_curve.png" width="200" alt="Curva de Recall">
+      <img src="images/R_curve.png" width="250" alt="Curva de Recall">
       <p>La curva de recall en función de la confianza nos muestra cómo el modelo identifica todos los casos relevantes a diferentes niveles de confianza. Vemos que el recall es muy alto (alrededor del 99%) para valores de confianza menores a 0.8, lo que indica que el modelo logra detectar la mayoría de los ejemplos de placa incluso con una confianza moderada.</p>
     </td>
   </tr>
   <tr>
     <td style="text-align: center; padding-right: 20px;">
-      <img src="images/results.png" width="200" alt="Resultados del Entrenamiento">
+      <img src="images/results.png" width="250" alt="Resultados del Entrenamiento">
       <p>Estas gráficas muestran la pérdida y las métricas de precisión y recall durante el entrenamiento y validación. Se observa una disminución continua en las pérdidas, lo que significa que el modelo aprende bien. Además, el aumento de la precisión y el recall indican que el modelo mejora su capacidad predictiva con cada iteración.</p>
     </td>
   </tr>
 </table>
+
 
 ### Instalar Real-ESRGAN
 
