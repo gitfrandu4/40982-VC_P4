@@ -164,7 +164,7 @@ upsampler = RealESRGANer(scale=4, model_path=model_path_esrgan, model=model_esrg
 
 ---
 
-### Configuración de Entrada y Salida de Video
+#### Configuración de Entrada y Salida de Video
 
 El código prepara el video para su captura utilizando `cv2.VideoCapture` y configura el video de salida.
 ```python
@@ -178,7 +178,7 @@ out = cv2.VideoWriter(output_video_path, fourcc, fps, (frame_width, frame_height
 
 ---
 
-### Algoritmo Principal de Detección y Seguimiento
+#### Algoritmo Principal de Detección y Seguimiento
 
 #### Bucle de Fotogramas
 El código entra en un bucle que procesa cada fotograma del video e incrementa el contador de fotogramas:
@@ -233,12 +233,7 @@ out.release()
 cv2.destroyAllWindows()
 ```
 
----
-
-Este script procesa un video detectando y siguiendo objetos específicos, aplicando OCR a las matrículas y guardando los resultados en un video anotado y un archivo CSV. Cada fotograma se procesa, anota y analiza, permitiendo un seguimiento eficiente de objetos y extracción de información en el video.
-
-
-#### Extra: Como instalar Real-ESRGAN
+### Extra: Como instalar Real-ESRGAN
 
 1. Primero, navega a la carpeta de tu proyecto y ejecuta los siguientes comandos:
 
