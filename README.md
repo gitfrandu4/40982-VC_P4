@@ -36,14 +36,14 @@ Este proyecto fue desarrollado por:
 #### Instalar Real-ESRGAN
 Nos ponemos en la carpeta del proyecto:
 
-> conda install git
->git clone https://github.com/xinntao/Real-ESRGAN
->cd Real-ESRGAN
->pip install basicsr
->pip install facexlib
->pip install gfpgan
->pip install -r requirements.txt
->python setup.py develop
+-> conda install git
+-> git clone https://github.com/xinntao/Real-ESRGAN
+-> cd Real-ESRGAN
+-> pip install basicsr
+-> pip install facexlib
+-> pip install gfpgan
+-> pip install -r requirements.txt
+-> python setup.py develop
 
 Descargamos: https://github.com/xinntao/Real-ESRGAN/releases/download/v0.1.0/RealESRGAN_x4plus.pth
 Y lo ponemos en la carpeta del proyecto.
