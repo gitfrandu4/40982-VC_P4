@@ -34,7 +34,7 @@ Este proyecto fue desarrollado por:
 
 ## Tarea
 
-## Reentramiento del Modelo YOLO con Ultraytics
+### Reentramiento del Modelo YOLO con Ultraytics
 El siguiente script configura y entrena un modelo YOLO usando un archivo `.yaml` para definir las rutas de los datos y las clases:
 
 ```python
@@ -72,7 +72,7 @@ if __name__ == "__main__":
     train_yolo()
 ```
 
-### Graficas Del Reentreamiento
+#### Graficas Del Reentreamiento
 
 <table style="width: 100%; text-align: center;">
   <tr>
@@ -123,8 +123,122 @@ if __name__ == "__main__":
   </tr>
 </table>
 
+### Configuración Inicial y Parámetros
 
-### Instalar Real-ESRGAN
+#### Rutas de Video y Modelos
+El script comienza definiendo las rutas para:
+- `video_path`: La ruta del video de entrada que se va a procesar.
+- `model_path`: Modelo YOLO para la detección general de objetos.
+- `license_plate_detector_model_path`: Modelo YOLO específico para la detección de matrículas.
+
+```python
+video_path = 'C0142.mp4'
+model_path = 'yolo11n.pt'
+license_plate_detector_model_path = 'runs2/detect/train9/weights/best.pt'
+```
+
+#### Configuración de Salida
+Define rutas y configuraciones de salida para el video y el archivo CSV, incluyendo las clases a detectar:
+```python
+output_video_path = 'output_video.mp4'
+csv_file_path = 'detection_tracking_log.csv'
+show_video = True
+classes_to_detect = [0, 1, 2, 3, 5]
+```
+
+#### Inicialización de Modelos
+Se inicializan los modelos YOLO y el detector de matrículas, además de un lector OCR (`easyocr`) para la extracción de texto de matrículas.
+```python
+model = YOLO(model_path)
+license_plate_detector = YOLO(license_plate_detector_model_path)
+reader = easyocr.Reader(['en'], gpu=True)
+```
+
+#### Configuración de Real-ESRGAN
+Real-ESRGAN mejora la calidad de imagen de las matrículas antes del OCR.
+```python
+model_esrgan = RRDBNet(num_in_ch=3, num_out_ch=3, num_feat=64, num_block=6, num_grow_ch=32, scale=4)
+model_path_esrgan = 'RealESRGAN_x4plus_anime_6B.pth'
+upsampler = RealESRGANer(scale=4, model_path=model_path_esrgan, model=model_esrgan, ...)
+```
+
+---
+
+### Configuración de Entrada y Salida de Video
+
+El código prepara el video para su captura utilizando `cv2.VideoCapture` y configura el video de salida.
+```python
+cap = cv2.VideoCapture(video_path)
+fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+fps = cap.get(cv2.CAP_PROP_FPS)
+frame_width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+frame_height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+out = cv2.VideoWriter(output_video_path, fourcc, fps, (frame_width, frame_height))
+```
+
+---
+
+### Algoritmo Principal de Detección y Seguimiento
+
+#### Bucle de Fotogramas
+El código entra en un bucle que procesa cada fotograma del video e incrementa el contador de fotogramas:
+```python
+ret, frame = cap.read()
+frame_number += 1
+```
+
+#### Procesamiento de Detecciones
+YOLO detecta objetos en el fotograma según `classes_to_detect`. Para cada objeto detectado:
+1. **Extracción de Coordenadas y Clase**: Obtiene la caja delimitadora y la confianza del objeto.
+2. **Seguimiento de ID Único**: Cuenta e identifica objetos únicos usando `track_id`.
+3. **Almacenamiento de Datos del Objeto**: Guarda datos como clase, confianza y detalles del fotograma en `object_info`.
+4. **Anotación**: Dibuja cajas alrededor de cada objeto detectado y añade etiquetas de clase y confianza.
+
+```python
+results = model.track(frame, persist=True, classes=classes_to_detect)
+```
+
+---
+
+### Detección y Reconocimiento de Matrículas
+
+Para cada vehículo detectado (auto, motocicleta, autobús):
+1. **Región de Interés (ROI) del Vehículo**: Recorta la región del vehículo detectado en el fotograma.
+2. **Detección de Matrículas**: Ejecuta el modelo YOLO de matrículas en la región recortada.
+3. **Mejora de Imagen con Real-ESRGAN**: Mejora la calidad de la imagen de la matrícula.
+4. **Extracción de Texto con OCR**: Extrae el texto de la matrícula con `easyocr`, guardando el texto con mayor confianza en `object_info`.
+5. **Anotaciones**: Dibuja cajas alrededor de las matrículas y muestra el texto en el fotograma.
+
+```python
+vehicle_img = frame[y1:y2, x1:x2]
+plate_results = license_plate_detector.predict(vehicle_img)
+output, _ = upsampler.enhance(np.array(license_plate_roi), outscale=4)
+plate_ocr_results = reader.readtext(enhanced_license_plate, allowlist='0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ')
+```
+
+---
+
+### Guardar Resultados y Liberación de Recursos
+
+Después de procesar todos los fotogramas, la información de detección de objetos se guarda en un archivo CSV, y se liberan los recursos para evitar problemas de memoria.
+
+```python
+with open(csv_file_path, mode='w', newline='') as file:
+    writer = csv.writer(file)
+    writer.writerow([...])
+    for track_id, info in object_info.items():
+        writer.writerow([...])
+cap.release()
+out.release()
+cv2.destroyAllWindows()
+```
+
+---
+
+Este script procesa un video detectando y siguiendo objetos específicos, aplicando OCR a las matrículas y guardando los resultados en un video anotado y un archivo CSV. Cada fotograma se procesa, anota y analiza, permitiendo un seguimiento eficiente de objetos y extracción de información en el video.
+
+
+### Extra: Como instalar Real-ESRGAN
 
 1. Primero, navega a la carpeta de tu proyecto y ejecuta los siguientes comandos:
 
@@ -178,6 +292,9 @@ Para resolver un error que puede ocurrir, edita el archivo `degradations.py` en 
 Esto debería corregir el problema y completar el proceso de instalación.
 
 ---
+
+### Resultados
+
 
 ## Referencias y bibliografía
 
