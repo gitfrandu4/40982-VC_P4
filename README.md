@@ -200,7 +200,7 @@ results = model.track(frame, persist=True, classes=classes_to_detect)
 
 ---
 
-### Detección y Reconocimiento de Matrículas
+#### Detección y Reconocimiento de Matrículas
 
 Para cada vehículo detectado (auto, motocicleta, autobús):
 1. **Región de Interés (ROI) del Vehículo**: Recorta la región del vehículo detectado en el fotograma.
@@ -218,7 +218,7 @@ plate_ocr_results = reader.readtext(enhanced_license_plate, allowlist='012345678
 
 ---
 
-### Guardar Resultados y Liberación de Recursos
+#### Guardar Resultados y Liberación de Recursos
 
 Después de procesar todos los fotogramas, la información de detección de objetos se guarda en un archivo CSV, y se liberan los recursos para evitar problemas de memoria.
 
@@ -238,7 +238,7 @@ cv2.destroyAllWindows()
 Este script procesa un video detectando y siguiendo objetos específicos, aplicando OCR a las matrículas y guardando los resultados en un video anotado y un archivo CSV. Cada fotograma se procesa, anota y analiza, permitiendo un seguimiento eficiente de objetos y extracción de información en el video.
 
 
-### Extra: Como instalar Real-ESRGAN
+#### Extra: Como instalar Real-ESRGAN
 
 1. Primero, navega a la carpeta de tu proyecto y ejecuta los siguientes comandos:
 
