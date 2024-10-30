@@ -2,7 +2,7 @@
 
 Este repositorio contiene la **Práctica 4** donde se utilizan técnicas de procesamiento de video para la detección y seguimiento de vehículos y personas, aplicando reconocimiento de caracteres a las matrículas visibles. Para ello, hacemos uso de modelos YOLO para detectar objetos y OCRs para el reconocimiento de texto.
 
-# Índice
+## Índice
 
 - [Práctica 4. Reconocimiento de matrículas](#práctica-4-reconocimiento-de-matrículas)
 - [Índice](#índice)
@@ -14,13 +14,14 @@ Este repositorio contiene la **Práctica 4** donde se utilizan técnicas de proc
 
 ## Librerías utilizadas
 
-[![YOLO](https://img.shields.io/badge/YOLO-v11-00FFFF?style=for-the-badge&logo=yolo)](https://ultralytics.com/yolo)
-[![PyTorch](https://img.shields.io/badge/PyTorch-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white)](https://pytorch.org/)
-[![Tesseract](https://img.shields.io/badge/Tesseract-OCR-5A5A5A?style=for-the-badge&logo=tesseract)](https://github.com/tesseract-ocr/tesseract)
-[![easyOCR](https://img.shields.io/badge/EasyOCR-FFD700?style=for-the-badge&logo=easyocr)](https://github.com/JaidedAI/EasyOCR)
-[![OpenCV](https://img.shields.io/badge/OpenCV-5C3EE8?style=for-the-badge&logo=opencv)](https://opencv.org/)
-[![CUDA](https://img.shields.io/badge/CUDA-76B900?style=for-the-badge&logo=nvidia&logoColor=white)](https://developer.nvidia.com/cuda-toolkit)
-
+[![YOLO](https://img.shields.io/badge/YOLO-v11-00FFFF?style=for-the-badge&logo=yolo)](https://ultralytics.com/yolo)  
+[![PyTorch](https://img.shields.io/badge/PyTorch-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white)](https://pytorch.org/)  
+[![Tesseract](https://img.shields.io/badge/Tesseract-OCR-5A5A5A?style=for-the-badge&logo=tesseract)](https://github.com/tesseract-ocr/tesseract)  
+[![easyOCR](https://img.shields.io/badge/EasyOCR-FFD700?style=for-the-badge&logo=easyocr)](https://github.com/JaidedAI/EasyOCR)  
+[![OpenCV](https://img.shields.io/badge/OpenCV-5C3EE8?style=for-the-badge&logo=opencv)](https://opencv.org/)  
+[![CUDA](https://img.shields.io/badge/CUDA-76B900?style=for-the-badge&logo=nvidia&logoColor=white)](https://developer.nvidia.com/cuda-toolkit)  
+[![Real-ESRGAN](https://img.shields.io/badge/Real--ESRGAN-FF4500?style=for-the-badge&logo=esrgan)](https://github.com/xinntao/Real-ESRGAN)  
+[![RRDBNet](https://img.shields.io/badge/RRDBNet-008080?style=for-the-badge)](https://github.com/xinntao/Real-ESRGAN)  
 
 ## Autores
 
@@ -29,11 +30,99 @@ Este proyecto fue desarrollado por:
 - [![GitHub](https://img.shields.io/badge/GitHub-Francisco%20Javier%20L%C3%B3pez%E2%80%93Dufour%20Morales-yellow?style=flat-square&logo=github)](https://github.com/gitfrandu4)
 - [![GitHub](https://img.shields.io/badge/GitHub-Marcos%20V%C3%A1zquez%20Tasc%C3%B3n-purple?style=flat-square&logo=github)](https://github.com/DerKom)
 
-## Tareas
 
-### Tarea 1
+## Tarea
 
-#### Instalar Real-ESRGAN
+## Reentramiento del Modelo YOLO con Ultraytics
+El siguiente script configura y entrena un modelo YOLO usando un archivo `.yaml` para definir las rutas de los datos y las clases:
+
+```python
+from ultralytics import YOLO
+
+# Ruta al archivo de configuración .yaml que especifica las rutas de los datos y las clases
+yaml_path = "datasets/data.yaml"
+
+# Ruta del modelo YOLO preentrenado que se usará como base
+base_model = "yolo11n.pt"  # Asegúrate de usar la versión correcta del modelo
+
+# Configuración de hiperparámetros para el entrenamiento
+img_size = 640          # Tamaño de las imágenes
+batch_size = 16         # Ajusta según la memoria de tu GPU
+epochs = 100            # Número de épocas
+device = "cuda:0"       # Especifica la GPU
+
+def train_yolo():
+    model = YOLO(base_model)
+    
+    model.train(
+        data=yaml_path,
+        imgsz=img_size,
+        batch=batch_size,
+        epochs=epochs,
+        device=device,
+        workers=4,                 # Número de trabajadores para la carga de datos
+        augment=True,              # Habilita el aumento de datos
+        verbose=True,              # Muestra información detallada durante el entrenamiento
+        # learning_rate=0.01,      # Puedes especificar una tasa de aprendizaje personalizada
+        # weight_decay=0.0005,     # Agrega regularización si es necesario
+    )
+
+if __name__ == "__main__":
+    train_yolo()
+```
+
+### Graficas Del Reentreamiento
+
+<table>
+  <tr>
+    <td style="text-align: center; padding-right: 20px;">
+      <img src="images/confusion_matrix.png" width="200" alt="Matriz de Confusión">
+      <p>Esta es la matriz de confusión que muestra cómo el modelo predice cada clase. Aquí vemos que el modelo identificó correctamente 2088 casos de “License Plate” y solo confundió 91 con la clase “background”. Esto sugiere que el modelo tiene un buen desempeño en general, con pocos errores al identificar placas, aunque aún podría mejorar en la reducción de falsos positivos.</p>
+    </td>
+    <td style="text-align: center;">
+      <img src="/mnt/data/confusion_matrix_normalized.png" width="200" alt="Matriz de Confusión Normalizada">
+      <p>En esta matriz de confusión normalizada, se representa la precisión relativa para cada clase, o sea, se normalizan los valores para ver la proporción de aciertos en lugar de los números absolutos. Notamos que el modelo tiene un 98% de precisión para detectar “License Plate” y un 100% para el “background”. Esto indica que, aunque el modelo es muy preciso en general, aún confunde algunos casos.</p>
+    </td>
+  </tr>
+  <tr>
+    <td style="text-align: center; padding-right: 20px;">
+      <img src="images/F1_curve.png" width="200" alt="Curva de F1">
+      <p>La curva de F1 en función de la confianza muestra cómo varía la F1 (una métrica que combina precisión y recall) dependiendo del umbral de confianza. Podemos ver que el modelo alcanza su mejor valor de F1 (cerca de 0.97) para niveles de confianza alrededor de 0.5. Esto significa que a ese nivel de confianza, el modelo logra un buen balance entre la precisión y el recall.</p>
+    </td>
+    <td style="text-align: center;">
+      <img src="images/labels.jpg" width="200" alt="Distribución de Etiquetas">
+      <p>Esta gráfica muestra la distribución de etiquetas. Vemos que la mayoría de los datos pertenecen a la clase “License Plate”. Esto puede ser útil para entender el sesgo en el dataset y también nos ayuda a identificar si el modelo podría tener más dificultad en detectar “background” debido a la menor cantidad de ejemplos de esa clase.</p>
+    </td>
+  </tr>
+  <tr>
+    <td style="text-align: center; padding-right: 20px;">
+      <img src="images/labels_correlogram.jpg" width="200" alt="Correlograma de Etiquetas">
+      <p>El correlograma de etiquetas muestra cómo se relacionan entre sí algunas propiedades de las etiquetas, como “x”, “y”, “width” y “height”. Notamos que hay una correlación entre “width” y “height”, lo que sugiere que las placas de matrícula tienden a tener proporciones similares. Esto puede ser útil para el modelo en la detección de patrones consistentes en las dimensiones de las placas.</p>
+    </td>
+    <td style="text-align: center;">
+      <img src="images/P_curve.png" width="200" alt="Curva de Precisión">
+      <p>Esta es la curva de precisión en función de la confianza, que muestra qué tan seguro está el modelo de sus predicciones. Aquí se observa que cuando el nivel de confianza es alto (por encima de 0.8), la precisión es casi perfecta (cercana al 100%). Esto significa que el modelo es muy preciso en sus predicciones cuando está bastante seguro, lo cual es un buen indicador de rendimiento.</p>
+    </td>
+  </tr>
+  <tr>
+    <td style="text-align: center; padding-right: 20px;">
+      <img src="images/PR_curve.png" width="200" alt="Curva Precisión-Recall">
+      <p>La curva de precisión-recall es útil para ver cómo el modelo maneja el balance entre estos dos aspectos. Aquí se muestra que el modelo mantiene altos valores tanto de precisión como de recall en la mayoría de los puntos. Esto significa que el modelo no solo es bueno para hacer predicciones correctas, sino también para captar la mayoría de los ejemplos de interés.</p>
+    </td>
+    <td style="text-align: center;">
+      <img src="images/R_curve.png" width="200" alt="Curva de Recall">
+      <p>La curva de recall en función de la confianza nos muestra cómo el modelo identifica todos los casos relevantes a diferentes niveles de confianza. Vemos que el recall es muy alto (alrededor del 99%) para valores de confianza menores a 0.8, lo que indica que el modelo logra detectar la mayoría de los ejemplos de placa incluso con una confianza moderada.</p>
+    </td>
+  </tr>
+  <tr>
+    <td style="text-align: center; padding-right: 20px;">
+      <img src="images/results.png" width="200" alt="Resultados del Entrenamiento">
+      <p>Estas gráficas muestran la pérdida y las métricas de precisión y recall durante el entrenamiento y validación. Se observa una disminución continua en las pérdidas, lo que significa que el modelo aprende bien. Además, el aumento de la precisión y el recall indican que el modelo mejora su capacidad predictiva con cada iteración.</p>
+    </td>
+  </tr>
+</table>
+
+### Instalar Real-ESRGAN
 
 1. Primero, navega a la carpeta de tu proyecto y ejecuta los siguientes comandos:
 
@@ -63,7 +152,7 @@ Este proyecto fue desarrollado por:
    - [RealESRGAN_x4plus.pth](https://github.com/xinntao/Real-ESRGAN/releases/download/v0.1.0/RealESRGAN_x4plus.pth)
    - [RealESRGAN_x4plus_anime_6B.pth](https://github.com/xinntao/Real-ESRGAN/releases/download/v0.2.2.4/RealESRGAN_x4plus_anime_6B.pth)
 
-##### Corrección de Error Conocido
+#### Corrección de Error Conocido
 
 Para resolver un error que puede ocurrir, edita el archivo `degradations.py` en tu entorno.
 
@@ -96,4 +185,5 @@ Esto debería corregir el problema y completar el proceso de instalación.
 - EasyOCR Documentation: [github.com/JaidedAI/EasyOCR](https://github.com/JaidedAI/EasyOCR)
 - OpenCV Documentation: [docs.opencv.org](https://docs.opencv.org/)
 - CUDA Documentation: [developer.nvidia.com/cuda-toolkit](https://developer.nvidia.com/cuda-toolkit)
-
+- Real-ESRGAN Documentation: [Real-ESRGAN Documentation](https://github.com/xinntao/Real-ESRGAN)
+- RRDBNet Documentation: [RRDBNet Documentation](https://github.com/xinntao/Real-ESRGAN)
