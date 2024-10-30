@@ -61,6 +61,7 @@ Este proyecto fue desarrollado por:
    
    Descarga el archivo del modelo desde el siguiente enlace y colócalo en la carpeta raíz del proyecto:  
    [RealESRGAN_x4plus.pth](https://github.com/xinntao/Real-ESRGAN/releases/download/v0.1.0/RealESRGAN_x4plus.pth)
+   [RealESRGAN_x4plus_anime_6B.pth](https://github.com/xinntao/Real-ESRGAN/releases/download/v0.2.2.4/RealESRGAN_x4plus_anime_6B.pth)
 
 ##### Corrección de Error Conocido
 
