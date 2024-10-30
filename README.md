@@ -283,12 +283,22 @@ Para resolver un error que puede ocurrir, edita el archivo `degradations.py` en 
    ```python
    from torchvision.transforms.functional import rgb_to_grayscale
    ```
-
+   
 Esto debería corregir el problema y completar el proceso de instalación.
 
----
-
 ### Resultados
+
+<table>
+  <tr>
+    <td style="text-align: center; padding-right: 20px;">
+      <img src="videos/result.gif" width="600" alt="GIF resultado de la izquierda">
+    </td>
+    <td style="text-align: center;">
+      <img src="images/result.png" width="600" alt="Imagen resultado de la derecha">
+    </td>
+  </tr>
+</table>
+
 
 
 ## Referencias y bibliografía
