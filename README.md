@@ -14,14 +14,15 @@ Este repositorio contiene la **Práctica 4** donde se utilizan técnicas de proc
 
 ## Librerías utilizadas
 
-[![YOLO](https://img.shields.io/badge/YOLO-v11-00FFFF?style=for-the-badge&logo=yolo)](https://ultralytics.com/yolo)  
-[![PyTorch](https://img.shields.io/badge/PyTorch-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white)](https://pytorch.org/)  
-[![Tesseract](https://img.shields.io/badge/Tesseract-OCR-5A5A5A?style=for-the-badge&logo=tesseract)](https://github.com/tesseract-ocr/tesseract)  
-[![easyOCR](https://img.shields.io/badge/EasyOCR-FFD700?style=for-the-badge&logo=easyocr)](https://github.com/JaidedAI/EasyOCR)  
-[![OpenCV](https://img.shields.io/badge/OpenCV-5C3EE8?style=for-the-badge&logo=opencv)](https://opencv.org/)  
-[![CUDA](https://img.shields.io/badge/CUDA-76B900?style=for-the-badge&logo=nvidia&logoColor=white)](https://developer.nvidia.com/cuda-toolkit)  
-[![Real-ESRGAN](https://img.shields.io/badge/Real--ESRGAN-FF4500?style=for-the-badge&logo=esrgan)](https://github.com/xinntao/Real-ESRGAN)  
-[![RRDBNet](https://img.shields.io/badge/RRDBNet-008080?style=for-the-badge)](https://github.com/xinntao/Real-ESRGAN)  
+[![YOLO](https://img.shields.io/badge/YOLO-v11-00FFFF?style=for-the-badge&logo=yolo)](https://ultralytics.com/yolo)
+[![PyTorch](https://img.shields.io/badge/PyTorch-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white)](https://pytorch.org/)
+[![Tesseract](https://img.shields.io/badge/Tesseract-OCR-5A5A5A?style=for-the-badge&logo=tesseract)](https://github.com/tesseract-ocr/tesseract)
+[![easyOCR](https://img.shields.io/badge/EasyOCR-FFD700?style=for-the-badge&logo=easyocr)](https://github.com/JaidedAI/EasyOCR)
+[![OpenCV](https://img.shields.io/badge/OpenCV-5C3EE8?style=for-the-badge&logo=opencv)](https://opencv.org/)
+[![CUDA](https://img.shields.io/badge/CUDA-76B900?style=for-the-badge&logo=nvidia&logoColor=white)](https://developer.nvidia.com/cuda-toolkit)
+[![Real-ESRGAN](https://img.shields.io/badge/Real--ESRGAN-FF4500?style=for-the-badge&logo=esrgan)](https://github.com/xinntao/Real-ESRGAN)
+[![RRDBNet](https://img.shields.io/badge/RRDBNet-008080?style=for-the-badge)](https://github.com/xinntao/Real-ESRGAN)
+
 
 ## Autores
 
