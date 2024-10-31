@@ -323,6 +323,8 @@ Este proyecto incluye funcionalidades avanzadas para la anonimización de person
 - **Anonimización de Matrículas**: Para vehículos identificados, se aplica desenfoque sobre las matrículas visibles.
 - **Control de Anonimización con la tecla "B"**: La tecla "B" habilita o deshabilita el efecto de desenfoque de manera dinámica durante el procesamiento del video. Esto permite al usuario decidir, en tiempo real, si se quiere aplicar el efecto de anonimización.
 
+<img src="images/anonymization.png" width="600" alt="Anonimización de Personas y Matrículas">
+
 ## Referencias y bibliografía
 
 - YOLO Documentation: [ultralytics.com/yolo](https://docs.ultralytics.com/)
