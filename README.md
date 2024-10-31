@@ -5,26 +5,27 @@ Este repositorio contiene la **Práctica 4** donde se utilizan técnicas de proc
 ## Índice
 
 - [Práctica 4. Reconocimiento de matrículas](#práctica-4-reconocimiento-de-matrículas)
-- [Índice](#índice)
+  - [Índice](#índice)
   - [Librerías utilizadas](#librerías-utilizadas)
   - [Autores](#autores)
   - [Tarea](#tarea)
     - [Reentramiento del Modelo YOLO con Ultraytics](#reentramiento-del-modelo-yolo-con-ultraytics)
-    - [Gráficas del Reentreamiento](#graficas-del-reentreamiento)
-  - [Configuración Inicial y Parámetros](#configuración-inicial-y-parámetros)
-    - [Rutas de Video y Modelos](#rutas-de-video-y-modelos)
-    - [Configuración de Salida](#configuración-de-salida)
-    - [Inicialización de Modelos](#inicialización-de-modelos)
-    - [Configuración de Real-ESRGAN](#configuración-de-real-esrgan)
-  - [Configuración de Entrada y Salida de Video](#configuración-de-entrada-y-salida-de-video)
-  - [Algoritmo Principal de Detección y Seguimiento](#algoritmo-principal-de-detección-y-seguimiento)
-    - [Bucle de Fotogramas](#bucle-de-fotogramas)
-    - [Procesamiento de Detecciones](#procesamiento-de-detecciones)
-    - [Detección y Reconocimiento de Matrículas](#detección-y-reconocimiento-de-matrículas)
-    - [Guardar Resultados y Liberación de Recursos](#guardar-resultados-y-liberación-de-recursos)
-  - [Extra: Cómo instalar Real-ESRGAN](#extra-como-instalar-real-esrgan)
-    - [Corrección de Error Conocido](#corrección-de-error-conocido)
-  - [Resultados](#resultados)
+      - [Graficas Del Reentreamiento](#graficas-del-reentreamiento)
+    - [Configuración Inicial y Parámetros](#configuración-inicial-y-parámetros)
+      - [Rutas de Video y Modelos](#rutas-de-video-y-modelos)
+      - [Configuración de Salida](#configuración-de-salida)
+      - [Inicialización de Modelos](#inicialización-de-modelos)
+      - [Configuración de Real-ESRGAN](#configuración-de-real-esrgan)
+      - [Configuración de Entrada y Salida de Video](#configuración-de-entrada-y-salida-de-video)
+      - [Algoritmo Principal de Detección y Seguimiento](#algoritmo-principal-de-detección-y-seguimiento)
+      - [Bucle de Fotogramas](#bucle-de-fotogramas)
+      - [Procesamiento de Detecciones](#procesamiento-de-detecciones)
+      - [Detección y Reconocimiento de Matrículas](#detección-y-reconocimiento-de-matrículas)
+      - [Guardar Resultados y Liberación de Recursos](#guardar-resultados-y-liberación-de-recursos)
+    - [Extra: Como instalar Real-ESRGAN](#extra-como-instalar-real-esrgan)
+      - [Corrección de Error Conocido](#corrección-de-error-conocido)
+    - [Resultados](#resultados)
+    - [Extra: Funcionalidades de Anonimización](#extra-funcionalidades-de-anonimización)
   - [Referencias y bibliografía](#referencias-y-bibliografía)
 
 ## Librerías utilizadas
@@ -314,7 +315,13 @@ Esto debería corregir el problema y completar el proceso de instalación.
   </tr>
 </table>
 
+### Extra: Funcionalidades de Anonimización
 
+Este proyecto incluye funcionalidades avanzadas para la anonimización de personas y matrículas en el video. A continuación se detalla cada una:
+
+- **Anonimización de Personas**: Detecta y aplica un efecto de desenfoque a las personas en el video.
+- **Anonimización de Matrículas**: Para vehículos identificados, se aplica desenfoque sobre las matrículas visibles.
+- **Control de Anonimización con la tecla "B"**: La tecla "B" habilita o deshabilita el efecto de desenfoque de manera dinámica durante el procesamiento del video. Esto permite al usuario decidir, en tiempo real, si se quiere aplicar el efecto de anonimización.
 
 ## Referencias y bibliografía
 
