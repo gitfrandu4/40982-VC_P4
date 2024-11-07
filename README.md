@@ -15,15 +15,13 @@ Este repositorio contiene la **Práctica 4** donde se utilizan técnicas de proc
       - [Rutas de Video y Modelos](#rutas-de-video-y-modelos)
       - [Configuración de Salida](#configuración-de-salida)
       - [Inicialización de Modelos](#inicialización-de-modelos)
-      - [Configuración de Real-ESRGAN](#configuración-de-real-esrgan)
       - [Configuración de Entrada y Salida de Video](#configuración-de-entrada-y-salida-de-video)
       - [Algoritmo Principal de Detección y Seguimiento](#algoritmo-principal-de-detección-y-seguimiento)
       - [Bucle de Fotogramas](#bucle-de-fotogramas)
-      - [Procesamiento de Detecciones](#procesamiento-de-detecciones)
-      - [Detección y Reconocimiento de Matrículas](#detección-y-reconocimiento-de-matrículas)
+    - [Procesamiento de Detecciones](#procesamiento-de-detecciones)
+    - [Detección y Reconocimiento de Matrículas](#detección-y-reconocimiento-de-matrículas)
+    - [Procesamiento de Matrículas usando OpenCV](#procesamiento-de-matrículas-usando-opencv)
       - [Guardar Resultados y Liberación de Recursos](#guardar-resultados-y-liberación-de-recursos)
-    - [Extra: Como instalar Real-ESRGAN](#extra-como-instalar-real-esrgan)
-      - [Corrección de Error Conocido](#corrección-de-error-conocido)
     - [Resultados](#resultados)
     - [Extra: Funcionalidades de Anonimización](#extra-funcionalidades-de-anonimización)
   - [Referencias y bibliografía](#referencias-y-bibliografía)
@@ -36,8 +34,6 @@ Este repositorio contiene la **Práctica 4** donde se utilizan técnicas de proc
 [![easyOCR](https://img.shields.io/badge/EasyOCR-FFD700?style=for-the-badge&logo=easyocr)](https://github.com/JaidedAI/EasyOCR)
 [![OpenCV](https://img.shields.io/badge/OpenCV-5C3EE8?style=for-the-badge&logo=opencv)](https://opencv.org/)
 [![CUDA](https://img.shields.io/badge/CUDA-76B900?style=for-the-badge&logo=nvidia&logoColor=white)](https://developer.nvidia.com/cuda-toolkit)
-[![Real-ESRGAN](https://img.shields.io/badge/Real--ESRGAN-FF4500?style=for-the-badge&logo=esrgan)](https://github.com/xinntao/Real-ESRGAN)
-[![RRDBNet](https://img.shields.io/badge/RRDBNet-008080?style=for-the-badge)](https://github.com/xinntao/Real-ESRGAN)
 
 
 ## Autores
@@ -170,16 +166,6 @@ license_plate_detector = YOLO(license_plate_detector_model_path)
 reader = easyocr.Reader(['en'], gpu=True)
 ```
 
-#### Configuración de Real-ESRGAN
-Real-ESRGAN mejora la calidad de imagen de las matrículas antes del OCR.
-```python
-model_esrgan = RRDBNet(num_in_ch=3, num_out_ch=3, num_feat=64, num_block=6, num_grow_ch=32, scale=4)
-model_path_esrgan = 'RealESRGAN_x4plus_anime_6B.pth'
-upsampler = RealESRGANer(scale=4, model_path=model_path_esrgan, model=model_esrgan, ...)
-```
-
----
-
 #### Configuración de Entrada y Salida de Video
 
 El código prepara el video para su captura utilizando `cv2.VideoCapture` y configura el video de salida.
@@ -203,7 +189,7 @@ ret, frame = cap.read()
 frame_number += 1
 ```
 
-#### Procesamiento de Detecciones
+### Procesamiento de Detecciones
 YOLO detecta objetos en el fotograma según `classes_to_detect`. Para cada objeto detectado:
 1. **Extracción de Coordenadas y Clase**: Obtiene la caja delimitadora y la confianza del objeto.
 2. **Seguimiento de ID Único**: Cuenta e identifica objetos únicos usando `track_id`.
@@ -216,14 +202,13 @@ results = model.track(frame, persist=True, classes=classes_to_detect)
 
 ---
 
-#### Detección y Reconocimiento de Matrículas
+### Detección y Reconocimiento de Matrículas
 
 Para cada vehículo detectado (auto, motocicleta, autobús):
 1. **Región de Interés (ROI) del Vehículo**: Recorta la región del vehículo detectado en el fotograma.
 2. **Detección de Matrículas**: Ejecuta el modelo YOLO de matrículas en la región recortada.
-3. **Mejora de Imagen con Real-ESRGAN**: Mejora la calidad de la imagen de la matrícula.
-4. **Extracción de Texto con OCR**: Extrae el texto de la matrícula con `easyocr`, guardando el texto con mayor confianza en `object_info`.
-5. **Anotaciones**: Dibuja cajas alrededor de las matrículas y muestra el texto en el fotograma.
+3. **Extracción de Texto con OCR**: Extrae el texto de la matrícula con `easyocr`, guardando el texto con mayor confianza en `object_info`.
+4. **Anotaciones**: Dibuja cajas alrededor de las matrículas y muestra el texto en el fotograma.
 
 ```python
 vehicle_img = frame[y1:y2, x1:x2]
@@ -231,6 +216,62 @@ plate_results = license_plate_detector.predict(vehicle_img)
 output, _ = upsampler.enhance(np.array(license_plate_roi), outscale=4)
 plate_ocr_results = reader.readtext(enhanced_license_plate, allowlist='0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ')
 ```
+
+### Procesamiento de Matrículas usando OpenCV
+
+En el proyecto, una vez detectada una matrícula dentro de la región del vehículo, aplicamos una serie de operaciones de OpenCV para mejorar la calidad de la imagen y optimizar el reconocimiento OCR. Los pasos específicos son los siguientes:
+
+1. **Recorte de la Región de la Matrícula**: Primero, se recorta la región de la imagen donde se encuentra la matrícula utilizando las coordenadas detectadas por el modelo. Esto se almacena en la variable `license_plate_roi`.
+
+```python
+license_plate_roi = frame[py1:py2, px1:px2]
+```
+2. **Redimensionado de la Imagen**: Para mejorar la legibilidad del texto, redimensionamos la imagen de la matrícula a una altura fija de 100 píxeles. Usamos el factor de escala correspondiente para que la imagen mantenga las proporciones originales.
+
+```python
+plate_height, plate_width = license_plate_roi.shape[:2]
+scale_factor = 100.0 / plate_height
+resized_plate = cv2.resize(
+license_plate_roi, None, fx=scale_factor, fy=scale_factor,
+interpolation=cv2.INTER_CUBIC)
+```
+
+3. **Conversión a Escala de Grises**: Convertimos la imagen a escala de grises para reducir la complejidad de procesamiento y enfocarnos en la información de luminancia necesaria para el OCR.
+
+```python
+gray_plate = cv2.cvtColor(resized_plate, cv2.COLOR_BGR2GRAY)
+```
+4. **Mejora de Contraste con CLAHE**: Para mejorar el contraste de la imagen, aplicamos el algoritmo de Ecualización Adaptativa de Histograma con Limitación de Contraste (CLAHE). Este proceso ayuda a resaltar los caracteres en la imagen.
+
+```python
+clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8,8))
+equalized_plate = clahe.apply(gray_plate)
+```
+
+5. **Reducción de Ruido**: Usamos el método `fastNlMeansDenoising` de OpenCV para reducir el ruido en la imagen sin afectar significativamente los bordes de los caracteres, lo cual es crucial para la precisión del OCR.
+
+```python
+denoised_plate = cv2.fastNlMeansDenoising(equalized_plate, None, 10, 7, 21)
+```
+
+6. **Umbral Adaptativo**: Para mejorar la detección de los caracteres, aplicamos un umbral adaptativo con el método cv2.adaptiveThreshold. Esto convierte la imagen en blanco y negro, resaltando las áreas de texto sobre el fondo.
+
+```python
+thresh_plate = cv2.adaptiveThreshold(
+denoised_plate, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
+cv2.THRESH_BINARY_INV, 11, 2)
+```
+
+7. **Operaciones Morfológicas**: Finalmente, aplicamos operaciones morfológicas para mejorar aún más la claridad de los caracteres y eliminar el ruido restante. Usamos un elemento estructurante rectangular para cerrar pequeños huecos en los caracteres y luego aplicamos una operación de apertura para eliminar el ruido externo.
+
+```python
+kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (3, 3))
+morph_plate = cv2.morphologyEx(thresh_plate, cv2.MORPH_CLOSE, kernel)
+morph_plate = cv2.morphologyEx(morph_plate, cv2.MORPH_OPEN, kernel)
+morph_plate = cv2.bitwise_not(morph_plate)
+```
+
+Este proceso de mejoras y limpieza de la imagen optimiza el rendimiento de OCR, permitiendo al sistema reconocer los caracteres de la matrícula con mayor precisión.
 
 ---
 
@@ -248,59 +289,6 @@ cap.release()
 out.release()
 cv2.destroyAllWindows()
 ```
-
-### Extra: Como instalar Real-ESRGAN
-
-1. Primero, navega a la carpeta de tu proyecto y ejecuta los siguientes comandos:
-
-   ```bash
-   # Instalar Git (si no lo tienes ya instalado)
-   conda install git
-
-   # Clonar el repositorio de Real-ESRGAN
-   git clone https://github.com/xinntao/Real-ESRGAN
-
-   # Navegar dentro del directorio del proyecto
-   cd Real-ESRGAN
-
-   # Instalar dependencias
-   pip install basicsr
-   pip install facexlib
-   pip install gfpgan
-   pip install -r requirements.txt
-
-   # Configurar el entorno de desarrollo
-   python setup.py develop
-   ```
-
-2. Descargar el modelo preentrenado:
-   
-   Descarga el archivo del modelo desde el siguiente enlace y colócalo en la carpeta raíz del proyecto:  
-   - [RealESRGAN_x4plus.pth](https://github.com/xinntao/Real-ESRGAN/releases/download/v0.1.0/RealESRGAN_x4plus.pth)
-   - [RealESRGAN_x4plus_anime_6B.pth](https://github.com/xinntao/Real-ESRGAN/releases/download/v0.2.2.4/RealESRGAN_x4plus_anime_6B.pth)
-
-#### Corrección de Error Conocido
-
-Para resolver un error que puede ocurrir, edita el archivo `degradations.py` en tu entorno.
-
-1. Localiza el archivo en:
-   ```plaintext
-   C:\Users\<tu_usuario>\anaconda3\envs\VC_P4\Lib\site-packages\basicsr\data\degradations.py
-   ```
-
-2. Busca la línea:
-
-   ```python
-   from torchvision.transforms.functional_tensor import rgb_to_grayscale
-   ```
-
-3. Reemplázala por:
-
-   ```python
-   from torchvision.transforms.functional import rgb_to_grayscale
-   ```
-   
-Esto debería corregir el problema y completar el proceso de instalación.
 
 ### Resultados
 
@@ -332,6 +320,3 @@ Este proyecto incluye funcionalidades avanzadas para la anonimización de person
 - Tesseract Documentation: [github.com/tesseract-ocr](https://github.com/tesseract-ocr/tesseract)
 - EasyOCR Documentation: [github.com/JaidedAI/EasyOCR](https://github.com/JaidedAI/EasyOCR)
 - OpenCV Documentation: [docs.opencv.org](https://docs.opencv.org/)
-- CUDA Documentation: [developer.nvidia.com/cuda-toolkit](https://developer.nvidia.com/cuda-toolkit)
-- Real-ESRGAN Documentation: [Real-ESRGAN Documentation](https://github.com/xinntao/Real-ESRGAN)
-- RRDBNet Documentation: [RRDBNet Documentation](https://github.com/xinntao/Real-ESRGAN)
